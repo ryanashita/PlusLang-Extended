@@ -26,8 +26,11 @@ let letws0 = pad (pstr "let")
 let letExpr = pseq (pright letws0 var) expr Let
 let ttws0 = pad (pstr "tt")
 let ttExpr = pseq (pright ttws0 expr) expr ThisThat
+let spushws0 = pad (pstr "push")
+let spopws0 = pad (pstr "pop")
+let scopeExpr = pright spushws0 expr |>> ScopePush <|> pright spopws0 expr |>> ScopePop
 
-exprImpl := plusExpr <|> letExpr <|> ttExpr <|> numws0 <|> var
+exprImpl := plusExpr <|> letExpr <|> ttExpr <|> scopeExpr <|> numws0 <|> var
 let grammar = pleft expr peof
 let parse input : Expr option = 
     match grammar (prepare input) with

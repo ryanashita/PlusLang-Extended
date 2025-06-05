@@ -6,4 +6,6 @@ type Expr =
 | Plus of Expr * Expr
 | Let of var: Expr * e: Expr
 | ThisThat of this: Expr * that: Expr
+| ScopePush of e: Expr
+| ScopePop of e: Expr
 

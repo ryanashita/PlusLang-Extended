@@ -2,31 +2,65 @@ module Evaluator
 
 open AST
 
-let d = new System.Collections.Generic.Dictionary<char,Expr>()
+type Scope = 
+| Base
+| Env of m: Map<char,Expr> * parent: Scope
+
+// let d = new System.Collections.Generic.Dictionary<char,Expr>()
+
+let env = Env(Map.empty, Base)
 
 let charFromVar e = 
     match e with 
     | Var c -> c
     | _ -> failwith "Expression is not a variable"
 
-let rec eval ast : Expr = 
+let rec lookup c s : Expr = 
+    match s with
+    | Base -> failwith ("Unkown variable '" + c.ToString() + "'")
+    | Env (m, parent) -> 
+        if Map.containsKey c m then
+            Map.find c m
+        else
+            lookup c parent
+
+let store c v s: Scope =
+    match s with
+    | Base -> failwith "Cannot store to base scope"
+    | Env (m, parent) ->
+        let m' = Map.add c v m
+        Env (m', parent)
+
+let parentOf env =
+    match env with
+    | Base -> failwith "Cannot get parent of base scope"
+    | Env (_, parent) -> parent
+
+let rec eval ast s : Expr * Scope = 
     match ast with
-    | Num n -> Num n
+    | Num n -> Num n, s
     | Plus (left, right) ->
-        let r1 = eval left
-        let r2 = eval right
+        let r1, s1 = eval left s
+        let r2, s2 = eval right s1
         match r1,r2 with
-        | Num n1, Num n2 -> Num (n1 + n2)
+        | Num n1, Num n2 -> Num (n1 + n2), s2
         | _ -> failwith "Can only add numbers."
     | Var c -> 
-        if (d.ContainsKey c) then d[c]
-        else failwith ("Unknown variable '" + c.ToString() + "'")
+        lookup c s, s
     | Let (var, e) -> 
-        let r = eval e
+        let r, s1 = eval e s
         let c = charFromVar var
-        d[c] <- r
-        r
+        let s2 = store c r s1
+        r, s2
     | ThisThat (this, that) ->
-        let r1 = eval this
-        let r2 = eval that
-        r2
+        let _, s1 = eval this s
+        let r, s2 = eval that s1
+        r, s2
+    | ScopePush e ->
+        let s1 = Env (Map.empty, s)
+        eval e s1
+    | ScopePop e ->
+        let res, s1 = eval e s
+        let parent = parentOf s1
+        res, parent
+
