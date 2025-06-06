@@ -1,0 +1,4 @@
+tt
+    let f
+        fun [x y] + x y
+    call f [1 2]

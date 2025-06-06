@@ -36,6 +36,14 @@ let parentOf env =
     | Base -> failwith "Cannot get parent of base scope"
     | Env (_, parent) -> parent
 
+let lambda p v e = 
+    ScopePush (
+        ThisThat (
+            Let (p,v),
+            ScopePop e
+        )
+    )
+
 let rec eval ast s : Expr * Scope = 
     match ast with
     | Num n -> Num n, s
@@ -63,4 +71,18 @@ let rec eval ast s : Expr * Scope =
         let res, s1 = eval e s
         let parent = parentOf s1
         res, parent
+    | FunDef (_,_) -> ast, s
+    | FunCall (f, args) ->
+        match f with
+        | Var _ -> 
+            let fundef, _ = eval f s
+            let fcall = FunCall (fundef, args)
+            eval fcall s
+        | FunDef (pars, body) ->
+            if List.length pars <> List.length args then
+                failwith "Number of arguments must match number of paramters"
+            let pa = List.zip pars args |> List.rev
+            let f = pa |> List.fold (fun acc (par,arg) -> lambda par arg acc) body
+            eval f s
+        | _ -> failwith "Can only call functions."
 

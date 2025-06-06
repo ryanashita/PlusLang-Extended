@@ -8,4 +8,6 @@ type Expr =
 | ThisThat of this: Expr * that: Expr
 | ScopePush of e: Expr
 | ScopePop of e: Expr
+| FunDef of pars: Expr list * body: Expr
+| FunCall of fundef: Expr * args: Expr list
 
