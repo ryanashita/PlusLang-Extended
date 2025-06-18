@@ -5,6 +5,10 @@ open AST
 
 (*
  *    <expr> ::= + <expr> <expr>
+ *            |  - <expr> <expr>
+ *            |  * <expr> <expr>
+ *            |  / <expr> <expr>
+ *            |  % <expr> <expr>
  *            |  let <var> <expr>
  *            |  tt <expr> <expr>
  *            |  <var>
@@ -24,6 +28,14 @@ let var = pad pletter |>> Var
 let numws0 = pad num
 let plusws0 = pad (pchar '+')
 let plusExpr = pseq (pright plusws0 expr) expr Plus
+let subtractws0 = pad (pchar '-')
+let subtractExpr = pseq (pright subtractws0 expr) expr Subtract
+let multiplyws0 = pad (pchar '*')
+let multiplyExpr = pseq (pright multiplyws0 expr) expr Multi
+let dividews0 = pad (pchar '/')
+let divideExpr = pseq (pright dividews0 expr) expr Divide
+let modws0 = pad (pchar '%')
+let modExpr = pseq (pright modws0 expr) expr Mod
 let letws0 = pad (pstr "let")
 let letExpr = pseq (pright letws0 var) expr Let
 let ttws0 = pad (pstr "tt")
@@ -39,7 +51,7 @@ let arglist = pbetween (pchar '[') (pad (pmany0sep expr (pchar ' '))) (pchar ']'
 let callws0 = pad (pstr "call")
 let funCallExpr = pseq (pright callws0 expr) arglist FunCall
 
-exprImpl := plusExpr <|> letExpr <|> ttExpr <|> scopeExpr <|> funDefExpr <|> funCallExpr <|> numws0 <|> var
+exprImpl := plusExpr <|> divideExpr <|> modExpr <|> multiplyExpr <|> subtractExpr <|> letExpr <|> ttExpr <|> scopeExpr <|> funDefExpr <|> funCallExpr <|> numws0 <|> var
 let grammar = pleft expr peof
 let parse input : Expr option = 
     match grammar (prepare input) with

@@ -113,11 +113,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/rickyanashita/Developer/personal/PlusLang-Extended/code/lang/lang.fsproj",
+      "projectUniqueName": "/Users/rickyanashita/Developer/ryanashita/PlusLang-Extended/code/lang/lang.fsproj",
       "projectName": "lang",
-      "projectPath": "/Users/rickyanashita/Developer/personal/PlusLang-Extended/code/lang/lang.fsproj",
+      "projectPath": "/Users/rickyanashita/Developer/ryanashita/PlusLang-Extended/code/lang/lang.fsproj",
       "packagesPath": "/Users/rickyanashita/.nuget/packages/",
-      "outputPath": "/Users/rickyanashita/Developer/personal/PlusLang-Extended/code/lang/obj/",
+      "outputPath": "/Users/rickyanashita/Developer/ryanashita/PlusLang-Extended/code/lang/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "/Users/rickyanashita/.nuget/NuGet/NuGet.Config"

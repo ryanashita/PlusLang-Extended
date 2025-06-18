@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "/Users/rickyanashita/Developer/personal/PlusLang-Extended/code/tests/tests.fsproj": {}
+    "/Users/rickyanashita/Developer/ryanashita/PlusLang-Extended/code/tests/tests.fsproj": {}
   },
   "projects": {
-    "/Users/rickyanashita/Developer/personal/PlusLang-Extended/code/lang/lang.fsproj": {
+    "/Users/rickyanashita/Developer/ryanashita/PlusLang-Extended/code/lang/lang.fsproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/rickyanashita/Developer/personal/PlusLang-Extended/code/lang/lang.fsproj",
+        "projectUniqueName": "/Users/rickyanashita/Developer/ryanashita/PlusLang-Extended/code/lang/lang.fsproj",
         "projectName": "lang",
-        "projectPath": "/Users/rickyanashita/Developer/personal/PlusLang-Extended/code/lang/lang.fsproj",
+        "projectPath": "/Users/rickyanashita/Developer/ryanashita/PlusLang-Extended/code/lang/lang.fsproj",
         "packagesPath": "/Users/rickyanashita/.nuget/packages/",
-        "outputPath": "/Users/rickyanashita/Developer/personal/PlusLang-Extended/code/lang/obj/",
+        "outputPath": "/Users/rickyanashita/Developer/ryanashita/PlusLang-Extended/code/lang/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/Users/rickyanashita/.nuget/NuGet/NuGet.Config"
@@ -67,14 +67,14 @@
         }
       }
     },
-    "/Users/rickyanashita/Developer/personal/PlusLang-Extended/code/tests/tests.fsproj": {
+    "/Users/rickyanashita/Developer/ryanashita/PlusLang-Extended/code/tests/tests.fsproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/rickyanashita/Developer/personal/PlusLang-Extended/code/tests/tests.fsproj",
+        "projectUniqueName": "/Users/rickyanashita/Developer/ryanashita/PlusLang-Extended/code/tests/tests.fsproj",
         "projectName": "tests",
-        "projectPath": "/Users/rickyanashita/Developer/personal/PlusLang-Extended/code/tests/tests.fsproj",
+        "projectPath": "/Users/rickyanashita/Developer/ryanashita/PlusLang-Extended/code/tests/tests.fsproj",
         "packagesPath": "/Users/rickyanashita/.nuget/packages/",
-        "outputPath": "/Users/rickyanashita/Developer/personal/PlusLang-Extended/code/tests/obj/",
+        "outputPath": "/Users/rickyanashita/Developer/ryanashita/PlusLang-Extended/code/tests/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/Users/rickyanashita/.nuget/NuGet/NuGet.Config"
@@ -90,8 +90,8 @@
           "net9.0": {
             "targetAlias": "net9.0",
             "projectReferences": {
-              "/Users/rickyanashita/Developer/personal/PlusLang-Extended/code/lang/lang.fsproj": {
-                "projectPath": "/Users/rickyanashita/Developer/personal/PlusLang-Extended/code/lang/lang.fsproj"
+              "/Users/rickyanashita/Developer/ryanashita/PlusLang-Extended/code/lang/lang.fsproj": {
+                "projectPath": "/Users/rickyanashita/Developer/ryanashita/PlusLang-Extended/code/lang/lang.fsproj"
               }
             }
           }

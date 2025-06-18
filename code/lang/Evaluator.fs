@@ -6,8 +6,6 @@ type Scope =
 | Base
 | Env of m: Map<char,Expr> * parent: Scope
 
-// let d = new System.Collections.Generic.Dictionary<char,Expr>()
-
 let env = Env(Map.empty, Base)
 
 let charFromVar e = 
@@ -53,6 +51,30 @@ let rec eval ast s : Expr * Scope =
         match r1,r2 with
         | Num n1, Num n2 -> Num (n1 + n2), s2
         | _ -> failwith "Can only add numbers."
+    | Subtract (left, right) ->
+        let r1, s1 = eval left s
+        let r2, s2 = eval right s1
+        match r1, r2 with
+        | Num n1, Num n2 -> Num (n1 - n2), s2
+        | _ -> failwith "Can only subtract numbers."
+    | Multi (left, right) ->
+        let r1, s1 = eval left s
+        let r2, s2 = eval right s1
+        match r1, r2 with
+        | Num n1, Num n2 -> Num (n1 * n2), s2
+        | _ -> failwith "Can only multiply numbers."
+    | Divide (left, right) ->
+        let r1, s1 = eval left s
+        let r2, s2 = eval right s1
+        match r1, r2 with
+        | Num n1, Num n2 -> Num (n1 / n2), s2
+        | _ -> failwith "Can only divide numbers."
+    | Mod (left, right) ->
+        let r1, s1 = eval left s
+        let r2, s2 = eval right s1
+        match r1, r2 with
+        | Num n1, Num n2 -> Num (n1 % n2), s2
+        | _ -> failwith "Can only modulo numbers."
     | Var c -> 
         lookup c s, s
     | Let (var, e) -> 
