@@ -42,6 +42,17 @@ let lambda p v e =
         )
     )
 
+let rec prettyprint (e: Expr) : string = 
+    match e with
+    | Num n -> string n
+    | Plus (l, r) -> "Plus (" + prettyprint l + ", " + prettyprint r + ")"
+    | Subtract (l, r) -> "Subtract (" + prettyprint l + ", " + prettyprint r + ")"
+    | Multi (l, r) -> "Multiply (" + prettyprint l + ", " + prettyprint r + ")"
+    | Divide (l, r) -> "Divide (" + prettyprint l + ", " + prettyprint r + ")"
+    | Mod (l, r) -> "Mod (" + prettyprint l + ", " + prettyprint r + ")"
+    | Var c -> "Variable " + string c
+    | _ -> failwith "Can't print"
+
 let rec eval ast s : Expr * Scope = 
     match ast with
     | Num n -> Num n, s
@@ -120,6 +131,11 @@ let rec eval ast s : Expr * Scope =
             let _, env1 = eval e s
             let s: Expr = Sequence es'
             eval s env1
+    | Print e ->
+        let e', s1 = eval e s
+        printfn "%s" (prettyprint e')
+        e, s1
+
 
         
 

@@ -5,7 +5,7 @@ type Expr =
 | Var of char
 | Plus of Expr * Expr
 | Subtract of Expr * Expr
- | Multi of Expr * Expr
+| Multi of Expr * Expr
 | Divide of Expr * Expr
 | Mod of Expr * Expr
 | Let of var: Expr * e: Expr
@@ -16,3 +16,4 @@ type Expr =
 | FunDef of pars: Expr list * body: Expr
 | FunCall of fundef: Expr * args: Expr list
 | Sequence of Expr list
+| Print of Expr

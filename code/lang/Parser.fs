@@ -52,8 +52,9 @@ let funDefExpr = pseq (pright funws0 parlist) expr FunDef
 let arglist = pbetween (pchar '[') (pad (pmany0sep expr (pchar ' '))) (pchar ']')
 let callws0 = pad (pstr "call")
 let funCallExpr = pseq (pright callws0 expr) arglist FunCall
+let printExpr = pright (pad (pstr "print")) expr |>> Print <!> "print"
 
-exprImpl := plusExpr <|> divideExpr <|> modExpr <|> multiplyExpr <|> subtractExpr <|> letExpr <|> scopeExpr <|> funDefExpr <|> funCallExpr <|> numws0 <|> var
+exprImpl := plusExpr <|> printExpr <|> divideExpr <|> modExpr <|> multiplyExpr <|> subtractExpr <|> letExpr <|> scopeExpr <|> funDefExpr <|> funCallExpr <|> numws0 <|> var
 let exprs = pmany1 (pleft (pad expr) pws0) |>> Sequence <!> "sequence"
 let grammar = pleft exprs peof
 let parse input : Expr option = 
