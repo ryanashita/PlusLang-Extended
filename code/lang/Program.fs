@@ -13,7 +13,7 @@ let main argv =
     
     let path = getPath argv[0]
     let input = System.IO.File.ReadAllText path
-
+    
     let env = Env(Map.empty, Base)
 
     match parse input with

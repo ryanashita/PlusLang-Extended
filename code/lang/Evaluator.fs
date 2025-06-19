@@ -15,7 +15,7 @@ let charFromVar e =
 
 let rec lookup c s : Expr = 
     match s with
-    | Base -> failwith ("Unkown variable '" + c.ToString() + "'")
+    | Base -> failwith ("Unknown variable '" + c.ToString() + "'")
     | Env (m, parent) -> 
         if Map.containsKey c m then
             Map.find c m
@@ -75,7 +75,7 @@ let rec eval ast s : Expr * Scope =
         match r1, r2 with
         | Num n1, Num n2 -> Num (n1 % n2), s2
         | _ -> failwith "Can only modulo numbers."
-    | Var c -> 
+    | Var c ->
         lookup c s, s
     | Let (var, e) -> 
         let r, s1 = eval e s
@@ -102,9 +102,20 @@ let rec eval ast s : Expr * Scope =
             eval fcall s
         | FunDef (pars, body) ->
             if List.length pars <> List.length args then
-                failwith "Number of arguments must match number of paramters"
+                failwith "Number of arguments must match number of parameters"
             let pa = List.zip pars args |> List.rev
             let f = pa |> List.fold (fun acc (par,arg) -> lambda par arg acc) body
             eval f s
         | _ -> failwith "Can only call functions."
+    | Sequence es ->
+        match es with 
+        | [] -> 
+            exit 1
+        | [e] -> eval e s
+        | e::es' -> 
+            let _, env1 = eval e s
+            let s: Expr = Sequence es'
+            eval s env1
+
+        
 

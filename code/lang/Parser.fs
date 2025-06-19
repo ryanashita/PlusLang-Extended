@@ -26,6 +26,7 @@ let pad p = pbetween pws0 p pws0
 let num = pmany1 pdigit |>> stringify |>> int |>> Num
 let var = pad pletter |>> Var
 let numws0 = pad num
+let bracketws0 p = pbetween (pad (pchar '{')) p (pad (pchar '}'))
 let plusws0 = pad (pchar '+')
 let plusExpr = pseq (pright plusws0 expr) expr Plus
 let subtractws0 = pad (pchar '-')
@@ -37,7 +38,7 @@ let divideExpr = pseq (pright dividews0 expr) expr Divide
 let modws0 = pad (pchar '%')
 let modExpr = pseq (pright modws0 expr) expr Mod
 let letws0 = pad (pstr "let")
-let letExpr = pseq (pright letws0 var) expr Let
+let letExpr = pseq (pright letws0 var) (bracketws0 expr) Let
 let ttws0 = pad (pstr "tt")
 let ttExpr = pseq (pright ttws0 expr) expr ThisThat
 let spushws0 = pad (pstr "push")
@@ -52,7 +53,8 @@ let callws0 = pad (pstr "call")
 let funCallExpr = pseq (pright callws0 expr) arglist FunCall
 
 exprImpl := plusExpr <|> divideExpr <|> modExpr <|> multiplyExpr <|> subtractExpr <|> letExpr <|> ttExpr <|> scopeExpr <|> funDefExpr <|> funCallExpr <|> numws0 <|> var
-let grammar = pleft expr peof
+let exprs = pmany1 (pleft (pad expr) pws0) |>> Sequence <!> "sequence"
+let grammar = pleft exprs peof
 let parse input : Expr option = 
     match grammar (prepare input) with
     | Success (ast,_) -> Some ast

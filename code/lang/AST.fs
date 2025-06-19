@@ -14,3 +14,4 @@ type Expr =
 | ScopePop of e: Expr
 | FunDef of pars: Expr list * body: Expr
 | FunCall of fundef: Expr * args: Expr list
+| Sequence of Expr list

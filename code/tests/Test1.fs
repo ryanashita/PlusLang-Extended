@@ -99,7 +99,7 @@ type Test1 () =
         | None -> Assert.IsTrue false
 
     [<TestMethod>]
-    member this.VariablesParserTest () =
+    member this.VariablesEvaluatorTest () =
         let path = getPath "00-variables.pled"
         let input = System.IO.File.ReadAllText path
         let result = parse input
@@ -107,7 +107,35 @@ type Test1 () =
         match result with
         | Some actual -> 
             let actual_result, actual_env = eval actual env
-            let expected_result = Num 10
+            let expected_result = Num 5
+            let compare = actual_result = expected_result
+            Assert.IsTrue compare
+        | None -> Assert.IsTrue false
+
+    [<TestMethod>]
+    member this.AssignmentEvaluatorTest () =
+        let path = getPath "01-let_expression.pled"
+        let input = System.IO.File.ReadAllText path
+        let result = parse input
+        let env = Env(Map.empty, Base)
+        match result with
+        | Some actual -> 
+            let actual_result, actual_env = eval actual env
+            let expected_result = Num 20
+            let compare = actual_result = expected_result
+            Assert.IsTrue compare
+        | None -> Assert.IsTrue false
+
+    [<TestMethod>]
+    member this.MultiLineEvaluatorTest () =
+        let path = getPath "06-new_syntax.pled"
+        let input = System.IO.File.ReadAllText path
+        let result = parse input
+        let env = Env(Map.empty, Base)
+        match result with
+        | Some actual -> 
+            let actual_result, actual_env = eval actual env
+            let expected_result = Num 54
             let compare = actual_result = expected_result
             Assert.IsTrue compare
         | None -> Assert.IsTrue false
