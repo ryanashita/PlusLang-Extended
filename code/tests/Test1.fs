@@ -112,7 +112,7 @@ type Test1 () =
             Assert.IsTrue compare
         | None -> Assert.IsTrue false
 
-    [<TestMethod>]
+    [<TestMethod>] 
     member this.AssignmentEvaluatorTest () =
         let path = getPath "01-let_expression.pled"
         let input = System.IO.File.ReadAllText path
@@ -139,5 +139,21 @@ type Test1 () =
             let compare = actual_result = expected_result
             Assert.IsTrue compare
         | None -> Assert.IsTrue false
+
+    [<TestMethod>]
+    member this.ScopeEvaluatorTest () =
+        let path = getPath "01-scope.pled"
+        let input = System.IO.File.ReadAllText path
+        let result = parse input
+        let env = Env(Map.empty, Base)
+        match result with
+        | Some actual -> 
+            let actual_result, actual_env = eval actual env
+            let expected_result = Num 17
+            let compare = actual_result = expected_result
+            Assert.IsTrue compare
+        | None -> Assert.IsTrue false
+
+    
 
 

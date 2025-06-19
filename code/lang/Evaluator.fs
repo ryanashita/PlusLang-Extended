@@ -93,6 +93,10 @@ let rec eval ast s : Expr * Scope =
         let res, s1 = eval e s
         let parent = parentOf s1
         res, parent
+    | Scope e ->
+        let s1 = Env (Map.empty, s)
+        let res, _ = eval e s1
+        res, s
     | FunDef (_,_) -> ast, s
     | FunCall (f, args) ->
         match f with

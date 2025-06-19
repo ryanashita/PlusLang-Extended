@@ -23,6 +23,7 @@ open AST
 // parser combinators
 let expr, exprImpl = recparser()
 let pad p = pbetween pws0 p pws0
+let padnnl p = pbetween pwsNoNL0 p pwsNoNL0
 let num = pmany1 pdigit |>> stringify |>> int |>> Num
 let var = pad pletter |>> Var
 let numws0 = pad num
@@ -38,12 +39,12 @@ let divideExpr = pseq (pright dividews0 expr) expr Divide
 let modws0 = pad (pchar '%')
 let modExpr = pseq (pright modws0 expr) expr Mod
 let letws0 = pad (pstr "let")
-let letExpr = pseq (pright letws0 var) (bracketws0 expr) Let
-let ttws0 = pad (pstr "tt")
-let ttExpr = pseq (pright ttws0 expr) expr ThisThat
-let spushws0 = pad (pstr "push")
-let spopws0 = pad (pstr "pop")
-let scopeExpr = pright spushws0 expr |>> ScopePush <|> pright spopws0 expr |>> ScopePop
+let semiws0 = pad (pchar ';')
+let letExpr = pseq (pright letws0 var) (pright (pstr ":=") (pleft expr semiws0)) Let
+let sopenws0 = pad (pchar '{')
+let sclosews0 = pad (pchar '}')
+let scopeExpr = pbetween sopenws0 expr sclosews0 |>> Scope
+// let scopeExpr = pright spushws0 expr |>> ScopePush <|> pright spopws0 expr |>> ScopePop
 let pmany0sep p sep = pmany0 (pleft p sep <|> p)
 let parlist = pbetween (pchar '[') (pad (pmany0sep var (pchar ' '))) (pchar ']')
 let funws0 = pad (pstr "fun")
@@ -52,7 +53,7 @@ let arglist = pbetween (pchar '[') (pad (pmany0sep expr (pchar ' '))) (pchar ']'
 let callws0 = pad (pstr "call")
 let funCallExpr = pseq (pright callws0 expr) arglist FunCall
 
-exprImpl := plusExpr <|> divideExpr <|> modExpr <|> multiplyExpr <|> subtractExpr <|> letExpr <|> ttExpr <|> scopeExpr <|> funDefExpr <|> funCallExpr <|> numws0 <|> var
+exprImpl := plusExpr <|> divideExpr <|> modExpr <|> multiplyExpr <|> subtractExpr <|> letExpr <|> scopeExpr <|> funDefExpr <|> funCallExpr <|> numws0 <|> var
 let exprs = pmany1 (pleft (pad expr) pws0) |>> Sequence <!> "sequence"
 let grammar = pleft exprs peof
 let parse input : Expr option = 

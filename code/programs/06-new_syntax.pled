@@ -1,5 +1,5 @@
-let x { + 1 1}
-let y { 54 }
+let x := + 1 1;
+let y := 54;
 y
 
 
