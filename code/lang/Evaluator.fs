@@ -34,12 +34,12 @@ let parentOf env =
     | Base -> failwith "Cannot get parent of base scope"
     | Env (_, parent) -> parent
 
-let lambda p v e = 
-    ScopePush (
-        ThisThat (
-            Let (p,v),
-            ScopePop e
-        )
+let lambdaNew p v e = 
+    Scope (
+        Sequence [
+            Let (p,v);
+            e
+        ]
     )
 
 let rec prettyprint (e: Expr) : string = 
@@ -95,17 +95,17 @@ let rec eval ast s : Expr * Scope =
         let c = stringFromVar var
         let s2 = store c r s1
         r, s2
-    | ThisThat (this, that) ->
-        let _, s1 = eval this s
-        let r, s2 = eval that s1
-        r, s2
-    | ScopePush e ->
-        let s1 = Env (Map.empty, s)
-        eval e s1
-    | ScopePop e ->
-        let res, s1 = eval e s
-        let parent = parentOf s1
-        res, parent
+    // | ThisThat (this, that) ->
+    //     let _, s1 = eval this s
+    //     let r, s2 = eval that s1
+    //     r, s2
+    // | ScopePush e ->
+    //     let s1 = Env (Map.empty, s)
+    //     eval e s1
+    // | ScopePop e ->
+    //     let res, s1 = eval e s
+    //     let parent = parentOf s1
+    //     res, parent
     | Scope e ->
         let s1 = Env (Map.empty, s)
         let res, _ = eval e s1
@@ -121,7 +121,7 @@ let rec eval ast s : Expr * Scope =
             if List.length pars <> List.length args then
                 failwith "Number of arguments must match number of parameters"
             let pa = List.zip pars args |> List.rev
-            let f = pa |> List.fold (fun acc (par,arg) -> lambda par arg acc) body
+            let f = pa |> List.fold (fun acc (par,arg) -> lambdaNew par arg acc) body
             eval f s
         | _ -> failwith "Can only call functions."
     | Sequence es ->

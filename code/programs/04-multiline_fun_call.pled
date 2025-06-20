@@ -1,4 +1,2 @@
-tt
-    let f
-        fun [x y] + x y
-    call f [1 2]
+let f := fun [x y] + x y; 
+call f [1 2]

@@ -50,7 +50,6 @@ let exprs = pmany1 (pleft (pad expr) pws0) |>> Sequence <!> "sequence"
 let sopenws0 = pad (pchar '{')
 let sclosews0 = pad (pchar '}')
 let scopeExpr = pbetween sopenws0 exprs sclosews0 |>> Scope
-// let scopeExpr = pright spushws0 expr |>> ScopePush <|> pright spopws0 expr |>> ScopePop
 let pmany0sep p sep = pmany0 (pleft p sep <|> p)
 let parlist = pbetween (pchar '[') (pad (pmany0sep var (pchar ' '))) (pchar ']')
 let funws0 = pad (pstr "fun")
