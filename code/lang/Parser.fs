@@ -25,8 +25,13 @@ let expr, exprImpl = recparser()
 let pad p = pbetween pws0 p pws0
 let padnnl p = pbetween pwsNoNL0 p pwsNoNL0
 let num = pmany1 pdigit |>> stringify |>> int |>> Num
-let var = pad pletter |>> Var
+let var = pad (pmany1 pletter) |>> stringify |>> Var
+let character = pad (pbetween (pchar ''') (pad pletter) (pchar ''')) |>> Char
 let numws0 = pad num
+let punctuation = pchar '!' <|> pchar '@' <|> pchar '#' <|> pchar '$' <|> pchar '%' <|> pchar '^' <|> pchar '&' <|> pchar '*' <|> pchar '(' <|> pchar ')' <|> pchar ':' <|> pchar ';' <|> pchar ',' <|> pchar '.' <|> pchar '?' <|> pchar '!' <|> pchar ' '
+let symbol = pletter <|> pupper <|> pdigit <|> punctuation
+let word = pmany1 symbol
+let pstring = pad (pbetween (pchar '"') (pad word) (pchar '"')) |>> stringify |>> String
 let bracketws0 p = pbetween (pad (pchar '{')) p (pad (pchar '}'))
 let plusws0 = pad (pchar '+')
 let plusExpr = pseq (pright plusws0 expr) expr Plus
@@ -55,8 +60,8 @@ let callws0 = pad (pstr "call")
 let funCallExpr = pseq (pright callws0 expr) arglist FunCall
 let printExpr = pright (pad (pstr "print")) expr |>> Print <!> "print"
 
-exprImpl := plusExpr <|> printExpr <|> divideExpr <|> modExpr <|> multiplyExpr <|> subtractExpr <|> letExpr <|> scopeExpr <|> funDefExpr <|> funCallExpr <|> numws0 <|> var
-let grammar = pleft exprs peof
+exprImpl := plusExpr <|> printExpr <|> divideExpr <|> modExpr <|> multiplyExpr <|> subtractExpr <|> letExpr <|> scopeExpr <|> funDefExpr <|> funCallExpr <|> numws0 <|> var <|> character <|> pstring
+let grammar = pleft expr peof <|> pleft exprs peof
 let parse input : Expr option = 
     match grammar (prepare input) with
     | Success (ast,_) -> Some ast

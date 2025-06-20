@@ -2,7 +2,9 @@ module AST
 
 type Expr =
 | Num of int
-| Var of char
+| Char of char
+| String of string
+| Var of string
 | Plus of Expr * Expr
 | Subtract of Expr * Expr
 | Multi of Expr * Expr

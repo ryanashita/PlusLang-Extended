@@ -4,29 +4,29 @@ open AST
 
 type Scope = 
 | Base
-| Env of m: Map<char,Expr> * parent: Scope
+| Env of m: Map<string,Expr> * parent: Scope
 
 let env = Env(Map.empty, Base)
 
-let charFromVar e = 
+let stringFromVar e = 
     match e with 
     | Var c -> c
     | _ -> failwith "Expression is not a variable"
 
-let rec lookup c s : Expr = 
+let rec lookup variable s : Expr = 
     match s with
-    | Base -> failwith ("Unknown variable '" + c.ToString() + "'")
+    | Base -> failwith ("Unknown variable '" + variable + "'")
     | Env (m, parent) -> 
-        if Map.containsKey c m then
-            Map.find c m
+        if Map.containsKey variable m then
+            Map.find variable m
         else
-            lookup c parent
+            lookup variable parent
 
-let store c v s: Scope =
+let store str v s: Scope =
     match s with
     | Base -> failwith "Cannot store to base scope"
     | Env (m, parent) ->
-        let m' = Map.add c v m
+        let m' = Map.add str v m
         Env (m', parent)
 
 let parentOf env =
@@ -56,6 +56,8 @@ let rec prettyprint (e: Expr) : string =
 let rec eval ast s : Expr * Scope = 
     match ast with
     | Num n -> Num n, s
+    | Char c -> Char c, s
+    | String str -> String str, s
     | Plus (left, right) ->
         let r1, s1 = eval left s
         let r2, s2 = eval right s1
@@ -90,7 +92,7 @@ let rec eval ast s : Expr * Scope =
         lookup c s, s
     | Let (var, e) -> 
         let r, s1 = eval e s
-        let c = charFromVar var
+        let c = stringFromVar var
         let s2 = store c r s1
         r, s2
     | ThisThat (this, that) ->

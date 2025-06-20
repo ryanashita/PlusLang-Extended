@@ -163,18 +163,44 @@ type Test1 () =
         | Some actual -> 
             let expected = 
                 Sequence [
-                    Let (Var 'x', Num 10);
+                    Let (Var "x", Num 10);
                     Scope (
                         Sequence [
-                            Let (Var 'x', Num 20); 
-                            Print (Var 'x')
+                            Let (Var "x", Num 20); 
+                            Print (Var "x")
                         ]
                     ); 
-                    Print (Var 'x')
+                    Print (Var "x")
                 ]
             let compare = actual = expected
             Assert.IsTrue compare
         | None -> Assert.IsTrue false
+
+    [<TestMethod>]
+    member this.CharParserTest () =
+        let path = getPath "01-chars.pled"
+        let input = System.IO.File.ReadAllText path
+        let result = parse input
+        match result with
+        | Some actual -> 
+            let expected = Let (Var "x", Char 'c')
+            let compare = actual = expected
+            Assert.IsTrue compare
+        | None -> Assert.IsTrue false
+
+    [<TestMethod>]
+    member this.StringParserTest () =
+        let path = getPath "01-strings.pled"
+        let input = System.IO.File.ReadAllText path
+        let result = parse input
+        match result with
+        | Some actual -> 
+            let expected = Let (Var "xtra", String "Hello world!")
+            let compare = actual = expected
+            Assert.IsTrue compare
+        | None -> Assert.IsTrue false
+
+    
 
     
 
