@@ -154,6 +154,32 @@ type Test1 () =
             Assert.IsTrue compare
         | None -> Assert.IsTrue false
 
+    [<TestMethod>]
+    member this.SequenceParserTest () =
+        let path = getPath "04-sequences.pled"
+        let input = System.IO.File.ReadAllText path
+        let result = parse input
+        match result with
+        | Some actual -> 
+            let expected = 
+                Sequence [
+                    Let (Var 'x', Num 10);
+                    Scope (
+                        Sequence [
+                            Let (Var 'x', Num 20); 
+                            Print (Var 'x')
+                        ]
+                    ); 
+                    Print (Var 'x')
+                ]
+            let compare = actual = expected
+            Assert.IsTrue compare
+        | None -> Assert.IsTrue false
+
+    
+
+    
+
     
 
 

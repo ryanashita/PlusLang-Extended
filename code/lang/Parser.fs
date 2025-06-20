@@ -41,9 +41,10 @@ let modExpr = pseq (pright modws0 expr) expr Mod
 let letws0 = pad (pstr "let")
 let semiws0 = pad (pchar ';')
 let letExpr = pseq (pright letws0 var) (pright (pstr ":=") (pleft expr semiws0)) Let
+let exprs = pmany1 (pleft (pad expr) pws0) |>> Sequence <!> "sequence"
 let sopenws0 = pad (pchar '{')
 let sclosews0 = pad (pchar '}')
-let scopeExpr = pbetween sopenws0 expr sclosews0 |>> Scope
+let scopeExpr = pbetween sopenws0 exprs sclosews0 |>> Scope
 // let scopeExpr = pright spushws0 expr |>> ScopePush <|> pright spopws0 expr |>> ScopePop
 let pmany0sep p sep = pmany0 (pleft p sep <|> p)
 let parlist = pbetween (pchar '[') (pad (pmany0sep var (pchar ' '))) (pchar ']')
@@ -55,7 +56,6 @@ let funCallExpr = pseq (pright callws0 expr) arglist FunCall
 let printExpr = pright (pad (pstr "print")) expr |>> Print <!> "print"
 
 exprImpl := plusExpr <|> printExpr <|> divideExpr <|> modExpr <|> multiplyExpr <|> subtractExpr <|> letExpr <|> scopeExpr <|> funDefExpr <|> funCallExpr <|> numws0 <|> var
-let exprs = pmany1 (pleft (pad expr) pws0) |>> Sequence <!> "sequence"
 let grammar = pleft exprs peof
 let parse input : Expr option = 
     match grammar (prepare input) with
