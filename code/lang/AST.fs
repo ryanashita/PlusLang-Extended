@@ -2,6 +2,7 @@ module AST
 
 type Expr =
 | Num of int
+| Real of float
 | Char of char
 | String of string
 | Var of string

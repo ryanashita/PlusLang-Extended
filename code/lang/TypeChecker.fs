@@ -10,6 +10,7 @@ type Type =
     | TNum
     | TChar
     | TString
+    | TReal
 
 type TypedExpr = {expr: Expr; tipe: Type}
 
@@ -55,6 +56,7 @@ let rec type_checker (expr: Expr) (env: Map<string, Type>) : Result<TypedExpr, s
     | Num n -> Ok { expr = Num n; tipe = TNum }
     | Char c -> Ok { expr = Char c; tipe = TChar }
     | String str -> Ok { expr = String str; tipe = TString }
+    | Real r -> Ok { expr = Real r; tipe = TReal }
     | Var v ->
         match Map.tryFind v env with
         | Some tipe -> Ok { expr = Var v; tipe = tipe }
@@ -64,9 +66,12 @@ let rec type_checker (expr: Expr) (env: Map<string, Type>) : Result<TypedExpr, s
         let r_result = type_checker r env
         match l_result, r_result with
         | Ok l', Ok r' when l'.tipe = r'.tipe ->
-            Ok { expr = Plus (l, r); tipe = TNum }
+            Ok { expr = Plus (l, r); tipe = r'.tipe }
         | Ok l', Ok r' ->
-            Error (sprintf "Type error in addition: %A and %A" l'.tipe r'.tipe)
+            if l'.tipe = TNum && r'.tipe = TReal || l'.tipe = TReal && r'.tipe = TNum then
+                Ok { expr = Plus (l, r); tipe = TReal }
+            else
+                Error (sprintf "Type error in addition: %A and %A" l'.tipe r'.tipe)
         | Error msg, _ | _, Error msg -> Error msg
     | _ -> Error "Type checking not implemented for this expression"
 

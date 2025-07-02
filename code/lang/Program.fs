@@ -23,8 +23,14 @@ let main argv =
         printfn "Expression : %A" ast
         let type_ast = type_checker ast tenv
         printfn "Type Checked Expression: %A" type_ast
-        // let result_ast, result_env = eval ast env
-        // printfn "Result: %A" result_ast
+        match type_ast with
+        | Ok typed_expr ->
+            printfn "Type: %A" typed_expr.tipe
+            let result_ast, result_env = eval ast env
+            printfn "Result: %A" result_ast
+        | Error err ->
+            printfn "Type Error: %s" err
+        
     | None -> printfn "Invalid expression"
     0
 

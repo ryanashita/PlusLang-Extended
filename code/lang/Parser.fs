@@ -3,28 +3,14 @@ module Parser
 open Combinator
 open AST
 
-(*
- *    <expr> ::= + <expr> <expr>
- *            |  - <expr> <expr>
- *            |  * <expr> <expr>
- *            |  / <expr> <expr>
- *            |  % <expr> <expr>
- *            |  let <var> <expr>
- *            |  tt <expr> <expr>
- *            |  <var>
- *            |  <num>
- *     <num> ::= <digit>+
- *   <digit> ::= 0 | 1 | .. | 9
- *     <var> ::= a | b | .. | y | z   
- * <parlist> ::= [ <var>* ]
- * <arglist> ::= [ <expr>* ]            
-*)
-
 // parser combinators
 let expr, exprImpl = recparser()
 let pad p = pbetween pws0 p pws0
 let padnnl p = pbetween pwsNoNL0 p pwsNoNL0
 let num = pmany1 pdigit |>> stringify |>> int |>> Num
+let num_before_dot = pleft (pmany0 pdigit) (pchar '.')
+let real = pseq num_before_dot (pmany0 pdigit) (fun (x,y) -> List.append x ('.'::y)) |>> stringify |>> float |>> Real
+let realws0 = pad real
 let var = pad (pmany1 pletter) |>> stringify |>> Var
 let character = pad (pbetween (pchar ''') (pad pletter) (pchar ''')) |>> Char
 let numws0 = pad num
@@ -59,7 +45,7 @@ let callws0 = pad (pstr "call")
 let funCallExpr = pseq (pright callws0 expr) arglist FunCall
 let printExpr = pright (pad (pstr "print")) expr |>> Print <!> "print"
 
-exprImpl := plusExpr <|> printExpr <|> divideExpr <|> modExpr <|> multiplyExpr <|> subtractExpr <|> letExpr <|> scopeExpr <|> funDefExpr <|> funCallExpr <|> numws0 <|> var <|> character <|> pstring
+exprImpl := plusExpr <|> printExpr <|> divideExpr <|> modExpr <|> multiplyExpr <|> subtractExpr <|> letExpr <|> scopeExpr <|> funDefExpr <|> funCallExpr <|> realws0<|> numws0 <|> var <|> character <|> pstring
 let grammar = pleft expr peof <|> pleft exprs peof
 let parse input : Expr option = 
     match grammar (prepare input) with
