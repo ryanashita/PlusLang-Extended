@@ -6,6 +6,7 @@ open Parser
 open Evaluator
 open Helper
 open AST
+open TypeChecker
 
 [<TestClass>]
 type Test1 () =
@@ -199,6 +200,20 @@ type Test1 () =
             let compare = actual = expected
             Assert.IsTrue compare
         | None -> Assert.IsTrue false
+
+    // [<TestMethod>]
+    // member this.TypeCheckTest () =
+    //     let input = "1"
+    //     let result = parse input
+    //     match result with
+    //     | Some ast -> 
+    //         let type_result = type_checker ast
+    //         match type_result with
+    //         | Some (TNum 1) -> Assert.IsTrue true
+    //         | _ -> Assert.IsTrue false
+    //     | None -> Assert.IsTrue false
+
+    
 
     
 
