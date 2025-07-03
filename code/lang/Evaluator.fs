@@ -65,7 +65,7 @@ let rec eval ast s : Expr * Scope =
         match r1,r2 with
         | Num n1, Num n2 -> Num (n1 + n2), s2
         | Real n1, Real n2 -> Real (n1 + n2), s2
-        | Char c1, Char c2 -> Char (char (int c1 + int c2)), s2
+        | Char c1, Char c2 -> String (string c1 + string c2), s2
         | String s1, String str2 -> String (s1 + str2), s2
         | Num n1, Real n2 -> Real (float n1 + n2), s2
         | Real n1, Num n2 -> Real (n1 + float n2), s2

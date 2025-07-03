@@ -70,9 +70,13 @@ let rec type_checker (expr: Expr) (env: Map<string, Type>) : Result<TypedExpr, s
         | Ok l', Ok r' ->
             if l'.tipe = TNum && r'.tipe = TReal || l'.tipe = TReal && r'.tipe = TNum then
                 Ok { expr = Plus (l, r); tipe = TReal }
+            elif l'.tipe = TChar && r'.tipe = TChar then
+                printfn "Adding two characters, converting to string"
+                Ok { expr = Plus (l, r); tipe = TString }
             else
                 Error (sprintf "Type error in addition: %A and %A" l'.tipe r'.tipe)
         | Error msg, _ | _, Error msg -> Error msg
     | _ -> Error "Type checking not implemented for this expression"
+    //TODO: Implement other expressions like Subtract, Multi, Divide, Mod, Let, Scope, FunDef, FunCall, Sequence, Print
 
 
