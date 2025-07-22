@@ -7,6 +7,7 @@ open Evaluator
 open Helper
 open AST
 open TypeChecker
+open CodeGenMIPS
 
 [<TestClass>]
 type Test1 () =
@@ -212,6 +213,30 @@ type Test1 () =
     //         | Some (TNum 1) -> Assert.IsTrue true
     //         | _ -> Assert.IsTrue false
     //     | None -> Assert.IsTrue false
+
+//     [<TestMethod>]
+//     member this.CodeGenMIPS () =
+//         let path = getPath "10-codegen.pled"
+//         let input = System.IO.File.ReadAllText path
+//         let parsed = parse input
+//         match parsed with
+//         | Some ast -> 
+//             let expected = ".text
+// .globl main
+// main:
+// li $t0, 4
+// li $t1, 7
+// add $t2, $t0, $t1
+// li $v0, 0
+// jr $ra
+
+// "
+//             let actual = codegenMIPS ast
+//             let compare = actual = expected
+//             printfn "actual: %s" actual
+//             printfn "expected: %s" expected
+//             Assert.IsTrue compare
+//         | None -> Assert.IsTrue false
 
     
 

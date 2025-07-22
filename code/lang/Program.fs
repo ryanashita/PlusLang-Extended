@@ -3,6 +3,8 @@ open Parser
 open Evaluator
 open Helper
 open TypeChecker
+open CodeGenMIPS
+open System.Text
 [<EntryPoint>]
 let main argv = 
     if argv.Length <> 1 then
@@ -16,21 +18,33 @@ let main argv =
     let input = System.IO.File.ReadAllText path
     
     let env = Env(Map.empty, Base)
-    let tenv = TEnv Seq.empty
+    // let tenv = TEnv Seq.empty
 
+    // match parse input with
+    // | Some ast ->
+    //     printfn "Expression : %A" ast
+    //     let type_ast = type_checker ast tenv
+    //     printfn "Type Checked Expression: %A" type_ast
+    //     match type_ast with
+    //     | Ok typed_expr ->
+    //         printfn "Type: %A" typed_expr.tipe
+    //         let result_ast, result_env = eval ast env
+    //         printfn "Result: %A" result_ast
+    //     | Error err ->
+    //         printfn "Type Error: %s" err
+        
+    // | None -> printfn "Invalid expression"
+
+    // match parse input with
+    // | Some ast ->
+    //     printfn "Expression : %A" ast
+    //     let result_ast, result_env = eval ast env
+    //     printfn "Result: %A" result_ast
+    // | None -> printfn "Invalid expression"
+    
+    // Code gen to MIPS assembly
     match parse input with
     | Some ast ->
-        printfn "Expression : %A" ast
-        let type_ast = type_checker ast tenv
-        printfn "Type Checked Expression: %A" type_ast
-        match type_ast with
-        | Ok typed_expr ->
-            printfn "Type: %A" typed_expr.tipe
-            let result_ast, result_env = eval ast env
-            printfn "Result: %A" result_ast
-        | Error err ->
-            printfn "Type Error: %s" err
-        
+        printfn "MIPS Assembly:\n%s" (codegenMIPS ast)
     | None -> printfn "Invalid expression"
     0
-
