@@ -9,10 +9,11 @@ To run examples...
 
 To test the project...
 1. Navigate to ```code```.
-2. Run the commands ```dotnet build```, followed by ```dotnet test```. 
+2. Run the commands ```dotnet build```, followed by ```dotnet test```.
+- **If the tests are not all succeeding, either I broke something or you made some changes***
 
 ## Elements of the compiler
-This simple plus-lang extended interpreter has three parts: Abstract Syntax Tree, Parser, and Evaluator. The AST defines the language's syntax and the tokens. The parser takes .pled source code and parses the code into a AST. The evaluator takes the AST and recursively evaluates (recursive descent) to ultimately return the value of the program.
+This simple plus-lang extended interpreter has three parts: Abstract Syntax Tree, Parser, and Evaluator. The AST defines the language's syntax and the tokens. The parser takes .pled source code and parses the code into a AST. The evaluator takes the AST and recursively evaluates (recursive descent) to ultimately return the value of the program. Pretty simple stuff. 
 
 Taking it one step further is the code generation. It can translate a plus-lang AST into MIPS assembly. The resulting code can be tested on these (limited) interactive websites: https://www.csfieldguide.org.nz/en/interactives/mips-assembler/, https://www.csfieldguide.org.nz/en/interactives/mips-simulator/. 
 
