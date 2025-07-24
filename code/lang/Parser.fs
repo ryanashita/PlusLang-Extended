@@ -44,8 +44,15 @@ let arglist = pbetween (pchar '[') (pad (pmany0sep expr (pchar ' '))) (pchar ']'
 let callws0 = pad (pstr "call")
 let funCallExpr = pseq (pright callws0 expr) arglist FunCall
 let printExpr = pright (pad (pstr "print")) expr |>> Print <!> "print"
+let greaterws0 = pad (pchar '>')
+let greaterExpr = pseq (pright greaterws0 expr) expr Greater
+let lessws0 = pad (pchar '<')
+let lessExpr = pseq (pright lessws0 expr) expr Less
+let equalws0 = pad (pstr "==")
+let equalExpr = pseq (pright equalws0 expr) expr Equal
+let comparisonExpr = greaterExpr <|> lessExpr <|> equalExpr
 
-exprImpl := plusExpr <|> printExpr <|> divideExpr <|> modExpr <|> multiplyExpr <|> subtractExpr <|> letExpr <|> scopeExpr <|> funDefExpr <|> funCallExpr <|> realws0<|> numws0 <|> var <|> character <|> pstring
+exprImpl := plusExpr <|> printExpr <|> divideExpr <|> modExpr <|> multiplyExpr <|> subtractExpr <|> comparisonExpr <|> letExpr <|> scopeExpr <|> funDefExpr <|> funCallExpr <|> realws0<|> numws0 <|> var <|> character <|> pstring
 let grammar = pleft expr peof <|> pleft exprs peof
 let parse input : Expr option = 
     match grammar (prepare input) with

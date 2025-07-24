@@ -96,6 +96,27 @@ let rec eval ast s : Expr * Scope =
         match r1, r2 with
         | Num n1, Num n2 -> Num (n1 % n2), s2
         | _ -> failwith "Can only modulo numbers."
+    | Greater (left, right) ->
+        let r1, s1 = eval left s
+        let r2, s2 = eval right s1
+        match r1, r2 with
+        | Num n1, Num n2 -> if n1 > n2 then Num 1,s2 else Num 0, s2
+        | Real n1, Real n2 -> if n1 > n2 then Num 1,s2 else Num 0, s2
+        | _ -> failwith "Can only compare numbers."
+    | Less (left, right) ->
+        let r1, s1 = eval left s
+        let r2, s2 = eval right s1
+        match r1, r2 with
+        | Num n1, Num n2 -> if n1 < n2 then Num 1,s2 else Num 0, s2
+        | Real n1, Real n2 -> if n1 < n2 then Num 1,s2 else Num 0, s2
+        | _ -> failwith "Can only compare numbers."
+    | Equal (left, right) ->
+        let r1, s1 = eval left s
+        let r2, s2 = eval right s1
+        match r1, r2 with
+        | Num n1, Num n2 -> if n1 = n2 then Num 1,s2 else Num 0, s2
+        | Real n1, Real n2 -> if n1 = n2 then Num 1,s2 else Num 0, s2
+        | _ -> failwith "Can only compare numbers."
     | Var c ->
         lookup c s, s
     | Let (var, e) -> 
@@ -143,7 +164,7 @@ let rec eval ast s : Expr * Scope =
             eval s env1
     | Print e ->
         let e', s1 = eval e s
-        printfn "%s" (prettyprint e')
+        printfn "-- %s" (prettyprint e')
         e, s1
 
 

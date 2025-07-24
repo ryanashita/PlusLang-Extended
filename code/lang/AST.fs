@@ -17,3 +17,6 @@ type Expr =
 | FunCall of fundef: Expr * args: Expr list
 | Sequence of Expr list
 | Print of Expr
+| Greater of Expr * Expr
+| Less of Expr * Expr
+| Equal of Expr * Expr

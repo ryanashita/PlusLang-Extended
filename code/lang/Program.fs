@@ -32,19 +32,21 @@ let main argv =
     //         printfn "Result: %A" result_ast
     //     | Error err ->
     //         printfn "Type Error: %s" err
-        
     // | None -> printfn "Invalid expression"
 
-    // match parse input with
-    // | Some ast ->
-    //     printfn "Expression : %A" ast
-    //     let result_ast, result_env = eval ast env
-    //     printfn "Result: %A" result_ast
-    // | None -> printfn "Invalid expression"
-    
-    // Code gen to MIPS assembly
     match parse input with
     | Some ast ->
-        printfn "MIPS Assembly:\n%s" (codegenMIPS ast)
+        printfn "Expression : %A" ast
+        let result_ast, result_env = eval ast env
+        printfn "Result: %A" result_ast
     | None -> printfn "Invalid expression"
+    
+    (*
+        Code generation for MIPS assembly
+    *)
+    // match parse input with
+    // | Some ast ->
+    //     printfn "MIPS Assembly:\n%s" (codegenMIPS ast)
+    // | None -> printfn "Invalid expression"
+    // 0
     0
