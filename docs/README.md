@@ -2,6 +2,8 @@
 PlusLang-Extended is a simple programming language with variables, types, lexical scope, functions, arithmetic, and higher-order support. It started as a simple interpreter but now includes type-checking and code generation/translation from .pled programs to MIPS Assembly. 
 
 ## How to run examples and tests
+This repo contains many example programs written in plus-lang (file extension ```.pled```) and tests using MSTest framework.
+
 To run examples...
 1. Clone this repository and navigate to ```code/lang```.
 2. Run the terminal command ```dotnet build```, making sure the .NET project builds correctly.
